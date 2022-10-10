@@ -1,3 +1,25 @@
-$(document).ready(function(){
-	$("#target").load("https://www.upwork.com/freelancers/~019afa74078924c379 #main>div>div>div>div>div>div.up-card.py-0.my-0.d-none.d-lg-block>section.row>div.col.min-width-0>section.up-card-section.py-30.work-history-section");
-});
+let ExternalURL = "www.dummysite.com";
+let ContentLocationInDOM = null; // If you're trying to get sub-content from the page, specify the "CSS style" jQuery syntax here, otherwise set this to "null"
+
+$(document).ready(loadContent);
+function loadContent()
+{
+  let QueryURL = "http://anyorigin.com/get?url=" + ExternalURL + "&callback=?";
+  $.getJSON(QueryURL, function(data){
+     if (data && data != null && typeof data == "object" && data.contents && data.contents != null && typeof data.contents == "string")
+     {
+        data = data.contents.replace("/<script[^>]*>[sS]*?</script>/gi", "");
+        if (data.length > 0)
+        {
+           if (ContentLocationInDOM && ContentLocationInDOM != null && ContentLocationInDOM != "null")
+           {
+              $('#target').html($(ContentLocationInDOM, data));
+           }
+           else
+           {
+              $('#target').html(data);
+           }
+        }
+     }
+  });
+}
